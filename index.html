@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>マイサイト</title>
+<style>
+  .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        #urlInput {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        #checkButton {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #4267e8;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+</stley>
+  <title>URL安全性チェッカー</title>
 </head>
 <body>
-  <h1>こんにちは！</h1>
+  <h1>URLに危険なところがないか確かめます</h1>
+  <p> <input type="text" placeholder="https://">
+    <button onclick="checkUrl()">チェック</button>
+    <p id="result"></p>
+<script>
+function checkUrl() {
+    const url = document.getElementById("urlInput").value;
+　　document.getElementById("result").textContent =
+        "入力されたURL：" + url;
+}
+</script>
 </body>
 </html>
