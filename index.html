@@ -64,11 +64,20 @@
   </div>
 
 <script>
-function checkUrl() {
-    const url = document.getElementById("urlInput").value;
+   function checkUrl() {
+    const input = document.getElementById("urlInput").value;
 
-    document.getElementById("result").textContent =
-        "入力されたURL：" + url;
+    try {
+        const url = new URL(input);
+        console.log("URL全体:", url.href);
+        console.log("通信方式:", url.protocol);
+        console.log("ドメイン:", url.hostname);
+        console.log("ポート:", url.port);
+        console.log("パス:", url.pathname);
+        console.log("パラメータ:", url.search);
+    } catch (error) {
+        console.log("URLとして正しくありません");
+    }
 }
 </script>
 </body>
