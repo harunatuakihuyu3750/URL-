@@ -74,9 +74,9 @@
             <p>URL全体：${url.href}</p>
             <p>通信方式：${url.protocol}</p>
             <p>ドメイン：${url.hostname}</p>
-            <p>ポート：${url.port}</p>
+            <p>通信サービス：${url.port || 443}</p>
             <p>パス：${url.pathname}</p>
-            <p>パラメータ：${url.search}</p>
+            <p>追加情報：${url.search || なし}</p>
         `;
 
     } catch (error) {
