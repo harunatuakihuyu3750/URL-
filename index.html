@@ -16,9 +16,9 @@
             margin-bottom: 30px;
         }
    .container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
+    max-width: 900px;
+    margin: 0 auto;
+}
 
         h1 {
             text-align: center;
@@ -53,12 +53,20 @@
     font-size: 16px;
     cursor: pointer;
 }
+   #result {
+    margin-top: 30px;
+}
 </style>
   <title>URL安全性チェッカー</title>
 </head>
 <body>
-   <h1>URLに危険なところがないか確かめます</h1></p>
-   <h2>結果はURLのみを見ているため違う可能性があります</h2></p>
+   <div class="container">
+
+    <h1>URLに危険なところがないか確かめます</h1>
+
+    <p class="description">
+      結果はURLのみを見ているため違う可能性があります
+    </p>
 
     <div class="input-area">
       <input id="urlInput" type="text" placeholder="https://">
