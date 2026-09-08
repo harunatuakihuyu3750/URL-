@@ -65,22 +65,26 @@
 
 <script>
   function checkUrl() {
-    const input = document.getElementById("urlInput").value;
-     
-     if (!input.startsWith("http://") && !input.startsWith("https://")) {
+    let input = document.getElementById("urlInput").value.trim();
+
+    // https:// や http:// がなければ自動で https:// を追加
+    if (!input.startsWith("http://") && !input.startsWith("https://")) {
         input = "https://" + input;
     }
 
     try {
         const url = new URL(input);
 
+        // ポート番号
+        const port = url.port || (url.protocol === "https:" ? 443 : 80);
+
         document.getElementById("result").innerHTML = `
             <p>URL全体：${url.href}</p>
             <p>通信方式：${url.protocol}</p>
             <p>ドメイン：${url.hostname}</p>
-            <p>通信サービス：${url.port || 443}</p>
+            <p>通信サービス：${port}</p>
             <p>パス：${url.pathname}</p>
-            <p>追加情報：${url.search || なし}</p>
+            <p>追加情報：${url.search || "なし"}</p>
         `;
 
     } catch (error) {
