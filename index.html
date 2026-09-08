@@ -66,6 +66,10 @@
 <script>
   function checkUrl() {
     const input = document.getElementById("urlInput").value;
+     
+     if (!input.startsWith("http://") && !input.startsWith("https://")) {
+        input = "https://" + input;
+    }
 
     try {
         const url = new URL(input);
