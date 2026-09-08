@@ -64,21 +64,40 @@
   </div>
 
 <script>
-  function checkUrl() {
+function checkUrl() {
     let input = document.getElementById("urlInput").value.trim();
 
-    // https:// や http:// がなければ自動で https:// を追加
+    // URLが空だった場合
+    if (input === "") {
+        document.getElementById("result").textContent =
+            "URLを入力してください";
+        return;
+    }
+
+    // https:// や http:// がなければ https:// を追加
     if (!input.startsWith("http://") && !input.startsWith("https://")) {
         input = "https://" + input;
     }
 
     try {
+        // URLを読み取る
         const url = new URL(input);
 
         // ポート番号
         const port = url.port || (url.protocol === "https:" ? 443 : 80);
 
+        // 安全性をチェック
+        let safetyResult;
+
+        if (url.protocol === "https:") {
+            safetyResult = " 比較的安全そうです";
+        } else {
+            safetyResult = " 注意が必要です";
+        }
+
+        // 画面に表示
         document.getElementById("result").innerHTML = `
+            <h2>${safetyResult}</h2>
             <p>URL全体：${url.href}</p>
             <p>通信方式：${url.protocol}</p>
             <p>ドメイン：${url.hostname}</p>
@@ -89,7 +108,7 @@
 
     } catch (error) {
         document.getElementById("result").textContent =
-            "URLとして正しくありません";
+            " URLとして正しくありません。もう一度入力してください";
     }
 }
 </script>
