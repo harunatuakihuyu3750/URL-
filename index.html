@@ -24,6 +24,11 @@
             text-align: center;
             margin-bottom: 10px;
         }
+  
+   h1 {
+            text-align: center;
+            margin-bottom: 4px;
+   }
 
         
   .input-area {
@@ -53,6 +58,7 @@
 </head>
 <body>
    <h1>URLに危険なところがないか確かめます</h1></p>
+   <h2>結果はURLのみを見ているため違う可能性があります</h2></p>
 
     <div class="input-area">
       <input id="urlInput" type="text" placeholder="https://">
@@ -90,9 +96,9 @@ function checkUrl() {
         let safetyResult;
 
         if (url.protocol === "https:") {
-            safetyResult = " 比較的安全そうです";
+            safetyResult = " 危険は見つかりませんでした";
         } else {
-            safetyResult = " 注意が必要です";
+            safetyResult = " 危険である可能性があります";
         }
 
         // 画面に表示
@@ -100,9 +106,9 @@ function checkUrl() {
             <h2>${safetyResult}</h2>
             <p>URL全体：${url.href}</p>
             <p>通信方式：${url.protocol}</p>
-            <p>ドメイン：${url.hostname}</p>
+            <p>WEB名：${url.hostname}</p>
             <p>通信サービス：${port}</p>
-            <p>パス：${url.pathname}</p>
+            <p>WEB内のページ：${url.pathname}</p>
             <p>追加情報：${url.search || "なし"}</p>
         `;
 
