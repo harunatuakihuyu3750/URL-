@@ -77,6 +77,13 @@
         console.log("パラメータ:", url.search);
     } catch (error) {
         console.log("URLとして正しくありません");
+       document.getElementById("result").innerHTML =
+    "URL全体：" + url.href + "<br>" +
+    "通信方式：" + url.protocol + "<br>" +
+    "ドメイン：" + url.hostname + "<br>" +
+    "ポート：" + url.port + "<br>" +
+    "パス：" + url.pathname + "<br>" +
+    "パラメータ：" + url.search;
     }
 }
 </script>
