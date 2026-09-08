@@ -64,26 +64,24 @@
   </div>
 
 <script>
-   function checkUrl() {
+  function checkUrl() {
     const input = document.getElementById("urlInput").value;
 
     try {
         const url = new URL(input);
-        console.log("URL全体:", url.href);
-        console.log("通信方式:", url.protocol);
-        console.log("ドメイン:", url.hostname);
-        console.log("ポート:", url.port);
-        console.log("パス:", url.pathname);
-        console.log("パラメータ:", url.search);
+
+        document.getElementById("result").innerHTML = `
+            <p>URL全体：${url.href}</p>
+            <p>通信方式：${url.protocol}</p>
+            <p>ドメイン：${url.hostname}</p>
+            <p>ポート：${url.port}</p>
+            <p>パス：${url.pathname}</p>
+            <p>パラメータ：${url.search}</p>
+        `;
+
     } catch (error) {
-        console.log("URLとして正しくありません");
-       document.getElementById("result").innerHTML =
-    "URL全体：" + url.href + "<br>" +
-    "通信方式：" + url.protocol + "<br>" +
-    "ドメイン：" + url.hostname + "<br>" +
-    "ポート：" + url.port + "<br>" +
-    "パス：" + url.pathname + "<br>" +
-    "パラメータ：" + url.search;
+        document.getElementById("result").textContent =
+            "URLとして正しくありません";
     }
 }
 </script>
