@@ -90,7 +90,8 @@ function checkUrl() {
 
     // https:// や http:// がなければ https:// を追加
     if (!input.startsWith("http://") && !input.startsWith("https://")) {
-        input = "https://" + input;
+         document.getElementById("result").textContent =
+            "https://またはhttp://がありません";
     }
 
     try {
