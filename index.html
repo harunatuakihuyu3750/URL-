@@ -86,14 +86,24 @@ function checkUrl() {
         document.getElementById("result").textContent =
             "URLを入力してください";
         return;
-    }
+   }
 
-    // https:// や http:// がなければ https:// を追加
-    if (!input.startsWith("http://") && !input.startsWith("https://")) {
-         document.getElementById("result").textContent =
-            "https://またはhttp://がありません";
-    }
+        let safetyResult;
+        let a = 0;
+        let warnings = [];
 
+　　　 // javascript: のチェック
+　　　if (input.toLowerCase().startsWith("javascript:")) {
+　　　    a++;
+　　　    warnings.push("javascript形式のURLです");
+　　　}
+
+　　　// data: のチェック
+　　　if (input.toLowerCase().startsWith("data:")) {
+　　　    a++;
+　　　    warnings.push("data形式のURLです");
+　　　}
+   
     try {
         // URLを読み取る
         const url = new URL(input);
@@ -102,11 +112,25 @@ function checkUrl() {
         const port = url.port || (url.protocol === "https:" ? 443 : 80);
 
         // 安全性をチェック
-        let safetyResult;
 
-        if (url.protocol === "https:") {
+
+       if(url.protocol === "http:"){
+          a = a+1;
+          warnings.push("HTTPSではありません");
+       }
+       if(url.username || url.password){
+          a = a+1;
+          warnings.push("URLにユーザー名かパスワードが含まれています");
+       }
+       if(input.includes("@")){
+          a = a+1;
+          warnings.push("URLに「＠」が含まれています");
+       }
+       
+
+        if (a == 0) {
             safetyResult = " 危険は見つかりませんでした";
-        } else {
+        } else{
             safetyResult = " 危険である可能性があります";
         }
 
