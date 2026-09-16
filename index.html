@@ -28,11 +28,13 @@
     h2  {
     text-align: center;
     margin-bottom: 4px;
+   color:#cc0000
    }
 
     h3 {
     text-align: center;
     margin-bottom: 0;
+   color:#ffd500
 }
 
 h4 {
@@ -155,7 +157,7 @@ function checkUrl() {
     　　　　<h2>${safetyResult}</h2>
             ${
         　　　　warnings.length > 0
-       　　　　 ? `<h3>⚠ 注意点</h3>
+       　　　　 ? `<h3>⚠ 注意点 ⚠</h3>
           　　 <h4>${warnings.join("<br>")}</h4> ` 
         　　　　: ""
   　　　　　  }
