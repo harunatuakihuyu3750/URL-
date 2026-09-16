@@ -84,7 +84,7 @@ h4 {
     </p>
 
     <div class="input-area">
-      <input id="urlInput" type="text" placeholder="https://">
+      <input id="urlInput" type="text" placeholder="https://" onkeydown="if(event.key === 'Enter') checkUrl()">
       <button id="checkButton" onclick="checkUrl()">チェック</button>
     </div>
 
