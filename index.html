@@ -20,34 +20,29 @@
     margin: 0 auto;
 }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-  
    h1 {
-            text-align: center;
-            margin-bottom: 4px;
+    text-align: center;
+    margin-bottom: 4px;
+　}
+
+    h2  {
+    text-align: center;
+    margin-bottom: 4px;
    }
 
-    h2 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-  
-   h2 {
-            text-align: center;
-            margin-bottom: 4px;
+    h3  {
+    text-align: center;
+    margin-bottom: 4px;
    }
 
-    h3 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-  
-   h3 {
-            text-align: center;
-            margin-bottom: 4px;
+    h4  {
+    text-align: center;
+    
+   }
+
+    h5  {
+    text-align: center;
+    
    }
 
 
@@ -163,15 +158,15 @@ function checkUrl() {
             ${
         　　　　warnings.length > 0
        　　　　 ? `<h3>⚠ 注意点</h3>
-          　　 <p>${warnings.join("<br>")}</p>`
+          　　 `<h4><p>${warnings.join("<br>")}</p></h4> ` 
         　　　　: ""
   　　　　　  }
-            <p>URL全体：${url.href}</p>
+            <h5><p>URL全体：${url.href}</p>
             <p>通信方式：${url.protocol}</p>
             <p>WEB名：${url.hostname}</p>
             <p>通信サービス：${port}</p>
             <p>WEB内のページ：${url.pathname}</p>
-            <p>追加情報：${url.search || "なし"}</p>
+            <p>追加情報：${url.search || "なし"}</p></h5>
         `;
 
     } catch (error) {
