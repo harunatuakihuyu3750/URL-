@@ -30,6 +30,27 @@
             margin-bottom: 4px;
    }
 
+    h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+  
+   h2 {
+            text-align: center;
+            margin-bottom: 4px;
+   }
+
+    h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+  
+   h3 {
+            text-align: center;
+            margin-bottom: 4px;
+   }
+
+
         
   .input-area {
     display: flex;
@@ -134,15 +155,17 @@ function checkUrl() {
             safetyResult = " 危険である可能性があります";
         }
 
-       if (warnings.length > 0) {
-   　　 　　document.getElementById("result").innerHTML =
-       　　 "<h3>⚠ 注意点</h3>" +
-       　　 warnings.join("<br>");
-　　　　}
+       
 
         // 画面に表示
         document.getElementById("result").innerHTML = `
-            <h2>${safetyResult}</h2>
+    　　　　<h2>${safetyResult}</h2>
+            ${
+        　　　　warnings.length > 0
+       　　　　 ? `<h3>⚠ 注意点</h3>
+          　　 <p>${warnings.join("<br>")}</p>`
+        　　　　: ""
+  　　　　　  }
             <p>URL全体：${url.href}</p>
             <p>通信方式：${url.protocol}</p>
             <p>WEB名：${url.hostname}</p>
