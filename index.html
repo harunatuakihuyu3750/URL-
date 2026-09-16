@@ -134,6 +134,12 @@ function checkUrl() {
             safetyResult = " 危険である可能性があります";
         }
 
+       if (warnings.length > 0) {
+   　　 　　document.getElementById("result").innerHTML =
+       　　 "<h3>⚠ 注意点</h3>" +
+       　　 warnings.join("<br>");
+　　　　}
+
         // 画面に表示
         document.getElementById("result").innerHTML = `
             <h2>${safetyResult}</h2>
