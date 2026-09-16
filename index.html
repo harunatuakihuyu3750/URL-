@@ -3,22 +3,22 @@
 <head>
 <style>
    body {
-            margin: 0;
-            padding: 40px 20px;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #222;
+       margin: 0;
+       padding: 40px 20px;
+       font-family: Arial, sans-serif;
+        background: #f4f6f8;
+       color: #222;
         }
 
-       .description {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
+   .description {
+     text-align: center;
+      color: #666;
+      margin-bottom: 30px;
         }
    .container {
-    max-width: 900px;
-    margin: 0 auto;
-}
+     max-width: 900px;
+      margin: 0 auto;
+   }
 
    h1 {
     text-align: center;
@@ -40,26 +40,19 @@
     margin-bottom: 4px;
    }
 
-    h5  {
-    text-align: center;
-    margin-bottom: 4px;
-   }
-
-
-        
-  .input-area {
+.input-area {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-}
+  }
 
-#urlInput {
+   #urlInput {
     width: 500px;
     padding: 10px;
-}
+  }
 
-#checkButton {
+  #checkButton {
     width: 120px;
     padding: 10px;
     border: none;
@@ -68,10 +61,15 @@
     color: white;
     font-size: 16px;
     cursor: pointer;
-}
+  }
    #result {
     margin-top: 30px;
-}
+    text-align: left;
+    width: 700px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+   }
 </style>
   <title>URL安全性チェッカー</title>
 </head>
@@ -161,12 +159,12 @@ function checkUrl() {
           　　 <h4><p>${warnings.join("<br>")}</p></h4> ` 
         　　　　: ""
   　　　　　  }
-            <h5><p>URL全体：${url.href}</p>
+            <p>URL全体：${url.href}</p>
             <p>通信方式：${url.protocol}</p>
             <p>WEB名：${url.hostname}</p>
             <p>通信サービス：${port}</p>
             <p>WEB内のページ：${url.pathname}</p>
-            <p>追加情報：${url.search || "なし"}</p></h5>
+            <p>追加情報：${url.search || "なし"}</p>
         `;
 
     } catch (error) {
