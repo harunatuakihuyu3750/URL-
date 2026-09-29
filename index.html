@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
    body {
        margin: 0;
@@ -51,8 +52,10 @@ h4 {
 
    #urlInput {
     width: 500px;
+    max-width: 100%;
     padding: 10px;
-  }
+    box-sizing: border-box;
+}
 
   #checkButton {
     width: 120px;
@@ -72,6 +75,22 @@ h4 {
     margin-left: auto;
     margin-right: auto;
    }
+   @media (max-width: 600px) {
+
+    .input-area {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #urlInput {
+        width: 100%;
+    }
+
+    #checkButton {
+        width: 100%;
+    }
+
+}
 </style>
   <title>URL安全性チェッカー</title>
 </head>
