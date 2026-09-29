@@ -75,7 +75,18 @@ h4 {
     margin-left: auto;
     margin-right: auto;
    }
-   @media (max-width: 600px) {
+  
+   #result p {
+    margin: 12px 0;
+}
+   .warnings {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 0;
+    font-size: 16px;
+}
+
+    @media (max-width: 600px) {
 
     .input-area {
         flex-direction: column;
@@ -89,11 +100,11 @@ h4 {
     #checkButton {
         width: 100%;
     }
-}
-   #result p {
-    margin: 12px 0;
-}
+      .warnings {
+        font-size: 14px;
+    }
 
+}
 #result p {
     overflow-wrap: anywhere;
 }
