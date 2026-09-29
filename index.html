@@ -97,6 +97,9 @@ h4 {
 #result p {
     overflow-wrap: anywhere;
 }
+   .label {
+    white-space: nowrap;
+}
 </style>
   <title>URL安全性チェッカー</title>
 </head>
@@ -190,7 +193,7 @@ function checkUrl() {
             <p>通信方式：${url.protocol}</p>
             <p>WEB名：${url.hostname}</p>
             <p>通信サービス：${port}</p>
-            <p>WEB内のページ：${url.pathname}</p>
+            <p><span class="label">WEB内のページ：</span>${url.pathname}</p>
             <p>追加情報：${url.search || "なし"}</p>
         `;
 
