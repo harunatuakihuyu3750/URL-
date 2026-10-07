@@ -148,7 +148,8 @@ h4 {
   </div>
 
 <script>
-function checkUrl() {
+<script>
+async function checkUrl() {
     let input = document.getElementById("urlInput").value.trim();
 
     // URLが空だった場合
@@ -156,78 +157,183 @@ function checkUrl() {
         document.getElementById("result").textContent =
             "URLを入力してください";
         return;
-   }
+    }
 
-        let safetyResult;
-        let a = 0;
-        let warnings = [];
+    let safetyResult;
+    let a = 0;
+    let warnings = [];
 
-　　　 // javascript: のチェック
-　　　if (input.toLowerCase().startsWith("javascript:")) {
-　　　    a++;
-　　　    warnings.push("javascript形式のURLです");
-　　　}
+    // javascript: のチェック
+    if (input.toLowerCase().startsWith("javascript:")) {
+        a++;
+        warnings.push("javascript形式のURLです");
+    }
 
-　　　// data: のチェック
-　　　if (input.toLowerCase().startsWith("data:")) {
-　　　    a++;
-　　　    warnings.push("data形式のURLです");
-　　　}
-   
+    // data: のチェック
+    if (input.toLowerCase().startsWith("data:")) {
+        a++;
+        warnings.push("data形式のURLです");
+    }
+
     try {
         // URLを読み取る
         const url = new URL(input);
 
         // ポート番号
-        const port = url.port || (url.protocol === "https:" ? 443 : 80);
+        const port =
+            url.port || (url.protocol === "https:" ? 443 : 80);
 
         // 安全性をチェック
 
-
-       if(url.protocol === "http:"){
-          a = a+1;
-          warnings.push("HTTPSではありません");
-       }
-       if(url.username || url.password){
-          a = a+1;
-          warnings.push("URLにユーザー名かパスワードが含まれています");
-       }
-       if(input.includes("@")){
-          a = a+1;
-          warnings.push("URLに「＠」が含まれています");
-       }
-       
-
-        if (a == 0) {
-            safetyResult = " 危険は見つかりませんでした";
-        } else{
-            safetyResult = " 危険である可能性があります";
+        if (url.protocol === "http:") {
+            a++;
+            warnings.push("HTTPSではありません");
         }
 
-       
+        if (url.username || url.password) {
+            a++;
+            warnings.push(
+                "URLにユーザー名かパスワードが含まれています"
+            );
+        }
 
-        // 画面に表示
+        if (input.includes("@")) {
+            a++;
+            warnings.push("URLに「＠」が含まれています");
+        }
+
+        // -------------------------
+        // Cloudflare URL Scanner
+        // -------------------------
+
         document.getElementById("result").innerHTML = `
-    　　　　<h2>${safetyResult}</h2>
+            <h2>確認中です...</h2>
+            <h4>URLの安全性を確認しています</h4>
+        `;
+
+        // WorkerにURLを送る
+        const response = await fetch(
+            "https://url-checker-api.natuhuyu1672.workers.dev/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    url: input
+                })
+            }
+        );
+
+        const scanData = await response.json();
+
+        // Worker側でエラーが起きた場合
+        if (!response.ok) {
+            throw new Error(
+                scanData.error || "スキャン開始に失敗しました"
+            );
+        }
+
+        const scanId = scanData.scan_id;
+
+        if (!scanId) {
+            throw new Error("scan_idを取得できませんでした");
+        }
+
+        // -------------------------
+        // スキャン結果を待つ
+        // -------------------------
+
+        let resultData = null;
+
+        for (let i = 0; i < 15; i++) {
+
+            // 2秒待つ
+            await new Promise(resolve =>
+                setTimeout(resolve, 2000)
+            );
+
+            const resultResponse = await fetch(
+                "https://url-checker-api.natuhuyu1672.workers.dev/?scan_id="
+                + encodeURIComponent(scanId)
+            );
+
+            resultData = await resultResponse.json();
+
+            // スキャン完了
+            if (resultData.status === "finished") {
+                break;
+            }
+        }
+
+        // 15回確認しても終わらなかった場合
+        if (!resultData || resultData.status !== "finished") {
+            document.getElementById("result").innerHTML = `
+                <h3>⚠ 確認できませんでした ⚠</h3>
+                <h4>スキャンに時間がかかっています。<br>
+                もう一度試してください。</h4>
+            `;
+            return;
+        }
+
+        // -------------------------
+        // Cloudflareの判定
+        // -------------------------
+
+        const cloudflareDanger = resultData.malicious === true;
+
+        if (cloudflareDanger) {
+            a++;
+            warnings.push(
+                "Cloudflareのスキャンで危険なURLと判定されました"
+            );
+        }
+
+        // -------------------------
+        // 最終結果
+        // -------------------------
+
+        if (a === 0) {
+            safetyResult = "危険は見つかりませんでした";
+        } else {
+            safetyResult = "危険である可能性があります";
+        }
+
+        // -------------------------
+        // 画面に表示
+        // -------------------------
+
+        document.getElementById("result").innerHTML = `
+            <h2>${safetyResult}</h2>
+
             ${
-        　　　　warnings.length > 0
-       　　　　 ? `<h3>⚠ 注意点 ⚠</h3>
-          　　 <h4>${warnings.join("<br>")}</h4> ` 
-        　　　　: ""
-  　　　　　  }
-            
+                warnings.length > 0
+                ? `<h3>⚠ 注意点 ⚠</h3>
+                   <h4>${warnings.join("<br>")}</h4>`
+                : ""
+            }
+
             <p>通信方式：${url.protocol}</p>
             <p>WEB名：${url.hostname}</p>
             <p>通信サービス：${port}</p>
-            <p><span class="label">WEB内のページ：</span>${url.pathname}</p>
+            <p>
+                <span class="label">WEB内のページ：</span>
+                ${url.pathname}
+            </p>
             <p>追加情報：${url.search || "なし"}</p>
         `;
 
     } catch (error) {
-        document.getElementById("result").textContent =
-            " URLとして正しくありません。もう一度入力してください";
+
+        console.error(error);
+
+        document.getElementById("result").innerHTML = `
+            <h3>確認中にエラーが発生しました</h3>
+            <h4>もう一度試してください</h4>
+        `;
     }
 }
+</script>
 </script>
 </body>
 </html>
