@@ -197,7 +197,7 @@ async function checkUrl() {
             );
         }
 
-        if (input.includes("@")) {
+        if (input.includes("@") || input.includes("＠")) {
             a++;
             warnings.push("URLに「＠」が含まれています");
         }
@@ -333,9 +333,9 @@ async function checkUrl() {
         // Cloudflareで失敗しても、自作チェックの結果を表示する
         if (url) {
             if (a === 0) {
-                safetyResult = "自作チェックでは注意点は見つかりませんでした";
+                safetyResult = "危険は見つかりませんでした";
             } else {
-                safetyResult = "注意が必要な可能性があります";
+                safetyResult = "危険である可能性があります";
             }
 
             document.getElementById("result").innerHTML = `
