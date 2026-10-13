@@ -135,7 +135,7 @@ h4 {
     <h1>URLに危険なところがないか確かめます</h1>
 
     <p class="description">
-      結果はURLのみを見ているため違う可能性があります
+     安全を保障するものではありません
     </p>
 
     <div class="input-area">
@@ -161,6 +161,7 @@ async function checkUrl() {
     let safetyResult;
     let a = 0;
     let warnings = [];
+    let url;
 
     // javascript: のチェック
     if (input.toLowerCase().startsWith("javascript:")) {
@@ -176,7 +177,7 @@ async function checkUrl() {
 
     try {
         // URLを読み取る
-        const url = new URL(input);
+      　url = new URL(input);
 
         // ポート番号
         const port =
@@ -208,6 +209,7 @@ async function checkUrl() {
         document.getElementById("result").innerHTML = `
             <h2>確認中です...</h2>
             <h4>URLの安全性を確認しています</h4>
+            <h4>結果が出るまで時間がかかる場合があります</h4>
         `;
 
         // WorkerにURLを送る
@@ -322,15 +324,46 @@ async function checkUrl() {
             <p>追加情報：${url.search || "なし"}</p>
         `;
 
+
+    
     } catch (error) {
 
-        console.error(error);
+        console.error("Cloudflareの確認に失敗しました:", error);
 
-        document.getElementById("result").innerHTML = `
-            <h3>確認中にエラーが発生しました</h3>
-            <h4>もう一度試してください</h4>
-        `;
+        // Cloudflareで失敗しても、自作チェックの結果を表示する
+        if (url) {
+            if (a === 0) {
+                safetyResult = "自作チェックでは注意点は見つかりませんでした";
+            } else {
+                safetyResult = "注意が必要な可能性があります";
+            }
+
+            document.getElementById("result").innerHTML = `
+                <h2>${safetyResult}</h2>
+
+                ${
+                    warnings.length > 0
+                    ? `<h3>⚠ 注意点 ⚠</h3>
+                       <h4>${warnings.join("<br>")}</h4>`
+                    : ""
+                }
+
+                <p>通信方式：${url.protocol}</p>
+                <p>WEB名：${url.hostname}</p>
+                <p>通信サービス：${url.port || (url.protocol === "https:" ? 443 : 80)}</p>
+                <p>
+                    <span class="label">WEB内のページ：</span>
+                    ${url.pathname}
+                </p>
+                <p>追加情報：${url.search || "なし"}</p>
+            `;
+        } else {
+            document.getElementById("result").textContent =
+                "URLの形式を確認してください";
+        }
     }
+
+
 }
 </script>
 </body>
