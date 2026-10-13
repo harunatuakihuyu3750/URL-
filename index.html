@@ -162,6 +162,7 @@ async function checkUrl() {
     let a = 0;
     let warnings = [];
     let url;
+    let reasons = [];
 
     // javascript: のチェック
     if (input.toLowerCase().startsWith("javascript:")) {
@@ -188,18 +189,41 @@ async function checkUrl() {
         if (url.protocol === "http:") {
             a++;
             warnings.push("HTTPSではありません");
+           reasons.push(
+           "通信が暗号化されないため、通信内容を第三者に見られたり改ざんされたりする可能性があります。"
+           );
         }
 
+        if (url.protocol === "javascript:") {
+            a++;
+            warnings.push("javascript形式のURLです");
+           reasons.push(
+           "URLを開く操作でJavaScriptが実行される形式のため、悪意あるコードに利用される可能性があります。"
+           );
+        }
+
+        if (url.protocol === "data:") {
+            a++;
+            warnings.push("data形式のURLです");
+           reasons.push(
+           "URLの中にデータを直接埋め込む形式で、意図しない内容を表示させるために使われる場合があります。"
+           );
+        }
+       
         if (url.username || url.password) {
             a++;
-            warnings.push(
-                "URLにユーザー名かパスワードが含まれています"
-            );
+            warnings.push("URLにユーザー名かパスワードが含まれています");
+           reasons.push(
+           "本当の接続先を分かりにくくするために悪用される場合があります。"
+           );
         }
 
         if (input.includes("@") || input.includes("＠")) {
-            a++;
-            warnings.push("URLに「＠」が含まれています");
+           a++;
+           warnings.push("URLに「＠」が含まれています");
+           reasons.push(
+           "URLの「@」より前がユーザー情報として扱われる場合があり、正規のドメインを偽装する手口に使われることがあります。"
+           );
         }
 
         // -------------------------
@@ -304,29 +328,21 @@ async function checkUrl() {
         // 画面に表示
         // -------------------------
 
+        
         document.getElementById("result").innerHTML = `
             <h2>${safetyResult}</h2>
 
             ${
                 warnings.length > 0
                 ? `<h3>⚠ 注意点 ⚠</h3>
-                   <h4>${warnings.join("<br>")}</h4>`
+                   <h4>${warnings.join("<br>")}</h4>
+                   <h3>注意が必要な理由</h3>
+                   <p>${reasons.join("<br><br>")}</p>`
                 : ""
             }
 
-            <p>通信方式：${url.protocol}</p>
-            <p>WEB名：${url.hostname}</p>
-            <p>通信サービス：${port}</p>
-            <p>
-                <span class="label">WEB内のページ：</span>
-                ${url.pathname}
-            </p>
-            <p>追加情報：${url.search || "なし"}</p>
-        `;
-
-
-    
-    } catch (error) {
+            
+        } catch (error) {
 
         console.error("Cloudflareの確認に失敗しました:", error);
 
@@ -338,26 +354,21 @@ async function checkUrl() {
                 safetyResult = "危険である可能性があります";
             }
 
-            document.getElementById("result").innerHTML = `
-                <h2>${safetyResult}</h2>
+            
+        document.getElementById("result").innerHTML = `
+            <h2>${safetyResult}</h2>
 
-                ${
-                    warnings.length > 0
-                    ? `<h3>⚠ 注意点 ⚠</h3>
-                       <h4>${warnings.join("<br>")}</h4>`
-                    : ""
-                }
+            ${
+                warnings.length > 0
+                ? `<h3>⚠ 注意点 ⚠</h3>
+                   <h4>${warnings.join("<br>")}</h4>
+                   <h3>注意が必要な理由</h3>
+                   <p>${reasons.join("<br><br>")}</p>`
+                : ""
+            }
 
-                <p>通信方式：${url.protocol}</p>
-                <p>WEB名：${url.hostname}</p>
-                <p>通信サービス：${url.port || (url.protocol === "https:" ? 443 : 80)}</p>
-                <p>
-                    <span class="label">WEB内のページ：</span>
-                    ${url.pathname}
-                </p>
-                <p>追加情報：${url.search || "なし"}</p>
-            `;
-        } else {
+            
+       } else {
             document.getElementById("result").textContent =
                 "URLの形式を確認してください";
         }
