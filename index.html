@@ -344,17 +344,18 @@ async function checkUrl() {
         document.getElementById("result").innerHTML = `
             <h2>${safetyResult}</h2>
 
-            ${
-                warnings.length > 0
-               ```javascript
-               ? `<div class="warning-box">
-                 <h3>⚠ 注意点 ⚠</h3>
-                 <h4>${warnings.join("<br>")}</h4>
-                 <h3>注意が必要な理由</h3>
-                 <p>${reasons.join("<br><br>")}</p>
-             </div>`
+            
+        ${
+           warnings.length > 0
+           ? `<div class="warning-box">
+              <h3>⚠ 注意点 ⚠</h3>
+              <h4>${warnings.join("<br>")}</h4>
+              <h3>注意が必要な理由</h3>
+              <p>${reasons.join("<br><br>")}</p>
+          </div>`
+         : ""
+       }
 
-            }
 
             `;
        
