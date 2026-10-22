@@ -377,10 +377,13 @@ async function checkUrl() {
 
             ${
                 warnings.length > 0
-                ? `<h3>⚠ 注意点 ⚠</h3>
-                   <h4>${warnings.join("<br>")}</h4>
-                   <h3>注意が必要な理由</h3>
-                   <p>${reasons.join("<br><br>")}</p>`
+              
+               ? `<div class="warning-box">
+               <h3>⚠ 注意点 ⚠</h3>
+               <h4>${warnings.join("<br>")}</h4>
+               <h3>注意が必要な理由</h3>
+               <p>${reasons.join("<br><br>")}</p>
+               </div>`
                 : ""
             }
 
