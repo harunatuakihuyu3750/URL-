@@ -174,6 +174,58 @@ h4 {
   </div>
 
 <script>
+
+
+   // 国民生活センターの悪質通販サイト情報
+// 2026年6月17日時点の掲載ドメイン
+const reportedDomains = [
+    "cpi.reduceee.ink",
+    "czwuh.pouchera.shop",
+    "bass.globent.live",
+    "home.aevacy.world",
+    "be.salesaxesm.click",
+    "sebm.rylixo.click",
+    "eiccjlme.strop.ru.com",
+    "be.pathlikeet.click",
+    "hokuolight.jp",
+    "day.sellltcvs.click",
+    "reyx.esmliqdz.club",
+    "vcpjf.lbwwdcyg.my",
+    "sxppel.ohtehd.za.com",
+    "zad.iaamexico.sa.com",
+    "shape.parl.info",
+    "earn.yomiri.ru.com",
+    "uerafn.donolds.za.com",
+    "dnatesla.com",
+    "gadic.thking.world",
+    "apjajmq.equiteck.ru.com",
+    "drmartensjpshop.com",
+    "koshinomiya.com",
+    "buyplgold.com",
+    "topiiever.com",
+    "pedrojapanonline.com",
+    "pyaqln.perfbuy.za.com",
+    "summer.starji.sa.com",
+    "srhcq.hockeystay.club",
+    "cutvrfuel.com",
+    "rope.chukani.com",
+    "icebugjapan.top",
+    "juicycouture-japan.com",
+    "digital.kidone.shop",
+    "rbmc.senorawooly.com",
+    "cooddyee.com",
+    "toms-japan.jp",
+    "ewjiq.famousmeans.shop",
+    "qppxel.fungameg.shop",
+    "gdraqf.gdclaz.shop",
+    "xilm.wingsbiotechllp.com",
+    "letqzgolf.live",
+    "nmnrv.qimine.com",
+    "blackdiamondstores.shop",
+    "everlane-japan.com",
+    "fjallravenjapan.com"
+];
+
 async function checkUrl() {
     let input = document.getElementById("urlInput").value.trim();
 
@@ -193,6 +245,26 @@ async function checkUrl() {
     try {
         // URLを読み取る
       　url = new URL(input);
+
+       // 公的機関の掲載履歴を確認
+const hostname = url.hostname.toLowerCase();
+
+const matchedDomain = reportedDomains.find(domain =>
+    hostname === domain ||
+    hostname.endsWith("." + domain)
+);
+
+if (matchedDomain) {
+    a++;
+
+    warnings.push(
+        "過去に国民生活センターの悪質通販サイト一覧に掲載されたドメインです"
+    );
+
+    reasons.push(
+        "このドメインは過去に公表された悪質通販サイト情報に掲載されています。現在のサイトの状態や運営者が同じとは限りません。"
+    );
+}
 
         // ポート番号
         const port =
