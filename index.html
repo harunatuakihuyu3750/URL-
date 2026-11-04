@@ -372,16 +372,43 @@ if (matchedDomain) {
             resultData = await resultResponse.json();
 
 // スキャン失敗
+// Cloudflareのスキャン失敗
 if (resultData.status === "failed") {
-   console.log("Cloudflareの判定詳細:", resultData.debug);
+
     document.getElementById("result").innerHTML = `
         <h2>判定できませんでした</h2>
+
         <div class="warning-box">
             <h3>⚠ 注意 ⚠</h3>
-            <p>URLの安全性を確認できませんでした。</p>
-            <p>安全と確認できていないため、URLを開かないでください。</p>
+
+            <p>
+                CloudflareによるURLの確認ができませんでした。
+            </p>
+
+            <p>
+                DNSの名前解決に失敗した場合など、
+                サイトの情報を取得できないことがあります。
+            </p>
+
+            <p>
+                安全性が確認できていないため、
+                URLを開かないでください。
+            </p>
+
+            ${
+                warnings.length > 0
+                ? `
+                    <h3>自動チェックで見つかった注意点</h3>
+                    <p>${warnings.join("<br>")}</p>
+
+                    <h3>注意が必要な理由</h3>
+                    <p>${reasons.join("<br><br>")}</p>
+                `
+                : ""
+            }
         </div>
     `;
+
     return;
 }
 
