@@ -299,10 +299,23 @@ async function checkUrl() {
 
             resultData = await resultResponse.json();
 
-            // スキャン完了
-            if (resultData.status === "finished") {
-                break;
-            }
+// スキャン失敗
+if (resultData.status === "failed") {
+    document.getElementById("result").innerHTML = `
+        <h2>判定できませんでした</h2>
+        <div class="warning-box">
+            <h3>⚠ 注意 ⚠</h3>
+            <p>URLの安全性を確認できませんでした。</p>
+            <p>安全と確認できていないため、URLを開かないでください。</p>
+        </div>
+    `;
+    return;
+}
+
+// スキャン完了
+if (resultData.status === "finished") {
+    break;
+}
         }
 
         // 15回確認しても終わらなかった場合
@@ -368,7 +381,7 @@ async function checkUrl() {
         // Cloudflareで失敗しても、自作チェックの結果を表示する
         if (url) {
             if (a === 0) {
-                safetyResult = "危険は見つかりませんでした";
+                safetyResult = "Cloudflareでは判定できませんでした";
             } else {
                 safetyResult = "危険である可能性があります";
             }
