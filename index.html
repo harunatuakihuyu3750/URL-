@@ -357,12 +357,12 @@ if (matchedDomain) {
 
         let resultData = null;
 
-        for (let i = 0; i < 15; i++) {
+       for (let i = 0; i < 12; i++) {
 
-            // 2秒待つ
-            await new Promise(resolve =>
-                setTimeout(resolve, 2000)
-            );
+    // 10秒待つ
+    await new Promise(resolve =>
+        setTimeout(resolve, 10000)
+    );
 
             const resultResponse = await fetch(
                 "https://url-checker-api.natuhuyu1672.workers.dev/?scan_id="
@@ -373,6 +373,7 @@ if (matchedDomain) {
 
 // スキャン失敗
 if (resultData.status === "failed") {
+   console.log("Cloudflareの判定詳細:", resultData.debug);
     document.getElementById("result").innerHTML = `
         <h2>判定できませんでした</h2>
         <div class="warning-box">
