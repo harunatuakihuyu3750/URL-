@@ -337,7 +337,9 @@ if (matchedDomain) {
         );
 
         const scanData = await response.json();
-
+       console.log("Cloudflare POSTステータス:", response.status);
+console.log("Cloudflare POST結果:", scanData);
+      
         // Worker側でエラーが起きた場合
         if (!response.ok) {
             throw new Error(
@@ -370,6 +372,8 @@ if (matchedDomain) {
             );
 
             resultData = await resultResponse.json();
+          console.log("Cloudflare GETステータス:", resultResponse.status);
+console.log("Cloudflare GET結果:", resultData);
 
 // スキャン失敗
 // Cloudflareのスキャン失敗
