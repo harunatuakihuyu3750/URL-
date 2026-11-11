@@ -323,161 +323,98 @@ if (matchedDomain) {
         `;
 
         // WorkerにURLを送る
-        const response = await fetch(
-            "https://url-checker-api.natuhuyu1672.workers.dev/",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    url: input
-                })
-            }
-        );
+        // WorkerにURLを送る
+const response = await fetch(
+    "https://url-checker-api.natuhuyu1672.workers.dev/",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            url: input
+        })
+    }
+);
 
-        const scanData = await response.json();
-       console.log("Cloudflare POSTステータス:", response.status);
-console.log("Cloudflare POST結果:", scanData);
-      
-        // Worker側でエラーが起きた場合
-        if (!response.ok) {
-            throw new Error(
-                scanData.error || "スキャン開始に失敗しました"
-            );
-        }
+const scanData = await response.json();
 
-        const scanId = scanData.scan_id;
+console.log("Workerの結果:", scanData);
 
-        if (!scanId) {
-            throw new Error("scan_idを取得できませんでした");
-        }
-
-        // -------------------------
-        // スキャン結果を待つ
-        // -------------------------
-
-        let resultData = null;
-
-       for (let i = 0; i < 12; i++) {
-
-    // 10秒待つ
-    await new Promise(resolve =>
-        setTimeout(resolve, 10000)
+if (!response.ok || scanData.status !== "finished") {
+    throw new Error(
+        scanData.message || "URLの確認に失敗しました"
     );
+}
 
-            const resultResponse = await fetch(
-                "https://url-checker-api.natuhuyu1672.workers.dev/?scan_id="
-                + encodeURIComponent(scanId)
-            );
+// URLhausの結果
+const urlhaus = scanData.urlhaus;
 
-            resultData = await resultResponse.json();
-          console.log("Cloudflare GETステータス:", resultResponse.status);
-console.log("Cloudflare GET結果:", resultData);
+// PhishTankの結果
+const phishtank = scanData.phishtank;
 
-// スキャン失敗
-// Cloudflareのスキャン失敗
-if (resultData.status === "failed") {
+// URLhausで危険情報が見つかった場合
+if (urlhaus?.status === "checked" && urlhaus.found === true) {
+    a++;
 
-    document.getElementById("result").innerHTML = `
-        <h2>判定できませんでした</h2>
+    warnings.push("URLhausで危険なURLとして登録されています");
 
-        <div class="warning-box">
-            <h3>⚠ 注意 ⚠</h3>
+    reasons.push(
+        "マルウェアに関連するURLとしてURLhausに登録されています。"
+    );
+}
 
-            <p>
-                CloudflareによるURLの確認ができませんでした。
-            </p>
+// PhishTankで危険情報が見つかった場合
+if (phishtank?.status === "checked" && phishtank.found === true) {
+    a++;
 
-            <p>
-                DNSの名前解決に失敗した場合など、
-                サイトの情報を取得できないことがあります。
-            </p>
+    warnings.push("PhishTankでフィッシングURLとして確認されています");
 
-            <p>
-                安全性が確認できていないため、
-                URLを開かないでください。
-            </p>
+    reasons.push(
+        "個人情報などをだまし取る目的で使われるURLとして登録されています。"
+    );
+}
+
+// データベースの確認状況
+const unavailable =
+    urlhaus?.status !== "checked" ||
+    phishtank?.status !== "checked";
+
+// 最終結果
+if (a > 0) {
+    safetyResult = "危険である可能性があります";
+} else if (unavailable) {
+    safetyResult = "一部の確認ができませんでした";
+} else {
+    safetyResult = "危険情報は見つかりませんでした";
+}
+
+// 画面に表示
+document.getElementById("result").innerHTML = `
+    <h2>${safetyResult}</h2>
+
+    ${
+        warnings.length > 0 || unavailable
+        ? `<div class="warning-box">
+            <h3>⚠ 注意点 ⚠</h3>
 
             ${
                 warnings.length > 0
-                ? `
-                    <h3>自動チェックで見つかった注意点</h3>
-                    <p>${warnings.join("<br>")}</p>
-
-                    <h3>注意が必要な理由</h3>
-                    <p>${reasons.join("<br><br>")}</p>
-                `
+                ? `<h4>${warnings.join("<br>")}</h4>
+                   <h3>注意が必要な理由</h3>
+                   <p>${reasons.join("<br><br>")}</p>`
                 : ""
             }
-        </div>
-    `;
 
-    return;
-}
-
-// スキャン完了
-if (resultData.status === "finished") {
-    break;
-}
-        }
-
-        // 15回確認しても終わらなかった場合
-        if (!resultData || resultData.status !== "finished") {
-            document.getElementById("result").innerHTML = `
-                <h3>⚠ 確認できませんでした ⚠</h3>
-                <h4>スキャンに時間がかかっています。<br>
-                もう一度試してください。</h4>
-            `;
-            return;
-        }
-
-        // -------------------------
-        // Cloudflareの判定
-        // -------------------------
-
-        const cloudflareDanger = resultData.malicious === true;
-
-        if (cloudflareDanger) {
-            a++;
-            warnings.push(
-                "Cloudflareのスキャンで危険なURLと判定されました"
-            );
-        }
-
-        // -------------------------
-        // 最終結果
-        // -------------------------
-
-        if (a === 0) {
-            safetyResult = "危険は見つかりませんでした";
-        } else {
-            safetyResult = "危険である可能性があります";
-        }
-
-        // -------------------------
-        // 画面に表示
-        // -------------------------
-
-        
-        document.getElementById("result").innerHTML = `
-            <h2>${safetyResult}</h2>
-
-            
-        ${
-           warnings.length > 0
-           ? `<div class="warning-box">
-              <h3>⚠ 注意点 ⚠</h3>
-              <h4>${warnings.join("<br>")}</h4>
-              <h3>注意が必要な理由</h3>
-              <p>${reasons.join("<br><br>")}</p>
-          </div>`
-         : ""
-       }
-
-
-            `;
-       
+            ${
+                unavailable
+                ? `<p>一部のデータベースに接続できず、確認できませんでした。</p>`
+                : ""
+            }
+        </div>`
+        : ""
+    }
+`;
         } catch (error) {
 
         console.error("Cloudflareの確認に失敗しました:", error);
