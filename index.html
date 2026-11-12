@@ -347,11 +347,12 @@ if (!response.ok || scanData.status !== "finished") {
     );
 }
 
+
 // URLhausの結果
 const urlhaus = scanData.urlhaus;
 
-// PhishTankの結果
-const phishtank = scanData.phishtank;
+// URLhausの確認状況
+const unavailable = urlhaus?.status !== "checked";
 
 // URLhausで危険情報が見つかった場合
 if (urlhaus?.status === "checked" && urlhaus.found === true) {
@@ -364,21 +365,15 @@ if (urlhaus?.status === "checked" && urlhaus.found === true) {
     );
 }
 
-// PhishTankで危険情報が見つかった場合
-if (phishtank?.status === "checked" && phishtank.found === true) {
-    a++;
-
-    warnings.push("PhishTankでフィッシングURLとして確認されています");
-
-    reasons.push(
-        "個人情報などをだまし取る目的で使われるURLとして登録されています。"
-    );
+// 最終結果
+if (a > 0) {
+    safetyResult = "危険である可能性があります";
+} else if (unavailable) {
+    safetyResult = "一部の確認ができませんでした";
+} else {
+    safetyResult = "危険情報は見つかりませんでした";
 }
 
-// データベースの確認状況
-const unavailable =
-    urlhaus?.status !== "checked" ||
-    phishtank?.status !== "checked";
 
 // 最終結果
 if (a > 0) {
