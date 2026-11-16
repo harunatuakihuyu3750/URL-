@@ -348,8 +348,12 @@ if (!response.ok || scanData.status !== "finished") {
 }
 
 
-// URLhausの結果
-const urlhaus = scanData.urlhaus;
+// URLhausの結果//////////
+const urlhaus = {
+    status: "checked",
+    found: true,
+    threat: "malware"
+};
 
 // URLhausの確認状況
 const unavailable = urlhaus?.status !== "checked";
