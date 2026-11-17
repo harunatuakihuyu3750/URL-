@@ -409,7 +409,8 @@ document.getElementById("result").innerHTML = `
         // Cloudflareで失敗しても、自作チェックの結果を表示する
         if (url) {
             if (a === 0) {
-                safetyResult = "Cloudflareでは判定できませんでした";
+    safetyResult = "外部データベースで判定できませんでした";
+}
             } else {
                 safetyResult = "危険である可能性があります";
             }
