@@ -187,6 +187,22 @@ h4 {
     font-size: 11px;
     color: #bbbbbb;
 }
+   .site-footer {
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 300px;
+    color: white;
+    font-size: 13px;
+}
+
+.site-footer a {
+    color: #9bbcff;
+    margin: 0 5px;
+}
+
+.site-footer p {
+    margin: 15px 0;
+}
 </style>
   <title>URLチェッカーver１</title>
 </head>
@@ -210,18 +226,6 @@ h4 {
     
   </div>
 
-   <!-- クレジット -->
-  <footer class="credits">
-    <p>使用したサービス・参考資料</p>
-
-    <a href="参考URL" target="_blank">国民生活センター</a>
-    <a href="https://www.cloudflare.com/" target="_blank">Cloudflare Workers</a>
-    <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
-
-    <p class="disclaimer">
-      ※このサイトは危険性を完全に判定・保証するものではありません。
-    </p>
-  </footer>
 
 <script>
 
@@ -491,5 +495,17 @@ document.getElementById("result").innerHTML = `
         }
     }
 </script>
+   <footer class="site-footer">
+    <h4>使用したサービス・参考資料</h4>
+
+    <p>
+        <a href="https://www.kokusen.go.jp/" target="_blank">国民生活センター</a>
+        <a href="https://www.cloudflare.com/" target="_blank">Cloudflare Workers</a>
+        <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+        <a href="https://urlhaus.abuse.ch/" target="_blank">URLhaus</a>
+    </p>
+
+    <p>※このサイトは危険性を完全に判定・保証するものではありません。</p>
+</footer>
 </body>
 </html>
