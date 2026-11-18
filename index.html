@@ -410,37 +410,42 @@ document.getElementById("result").innerHTML = `
         if (url) {
             if (a === 0) {
     safetyResult = "外部データベースで判定できませんでした";
-}
-            } else {
-                safetyResult = "危険である可能性があります";
-            }
 
             
-        document.getElementById("result").innerHTML = `
-            <h2>${safetyResult}</h2>
+        } catch (error) {
 
-            ${
-                warnings.length > 0
-              
-               ? `<div class="warning-box">
-               <h3>⚠ 注意点 ⚠</h3>
-               <h4>${warnings.join("<br>")}</h4>
-               <h3>注意が必要な理由</h3>
-               <p>${reasons.join("<br><br>")}</p>
-               </div>`
-                : ""
+            console.error("外部データベースの確認に失敗しました:", error);
+
+            // 外部データベースで失敗しても、自作チェックの結果を表示する
+            if (url) {
+                if (a === 0) {
+                    safetyResult = "外部データベースで判定できませんでした";
+                } else {
+                    safetyResult = "危険である可能性があります";
+                }
+
+                document.getElementById("result").innerHTML = `
+                    <h2>${safetyResult}</h2>
+
+                    ${
+                        warnings.length > 0
+                        ? `<div class="warning-box">
+                            <h3>⚠ 注意点 ⚠</h3>
+                            <h4>${warnings.join("<br>")}</h4>
+                            <h3>注意が必要な理由</h3>
+                            <p>${reasons.join("<br><br>")}</p>
+                           </div>`
+                        : ""
+                    }
+                `;
+
+            } else {
+                document.getElementById("result").textContent =
+                    "URLの形式を確認してください";
             }
-
-            `;
-           
-       } else {
-            document.getElementById("result").textContent =
-                "URLの形式を確認してください";
         }
     }
-
-
-}
 </script>
 </body>
 </html>
+
