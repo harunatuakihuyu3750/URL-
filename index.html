@@ -402,22 +402,14 @@ document.getElementById("result").innerHTML = `
         : ""
     }
 `;
-        } catch (error) {
-
-        console.error("Cloudflareの確認に失敗しました:", error);
-
-        // Cloudflareで失敗しても、自作チェックの結果を表示する
-        if (url) {
-            if (a === 0) {
-    safetyResult = "外部データベースで判定できませんでした";
-
-            
+        
         } catch (error) {
 
             console.error("外部データベースの確認に失敗しました:", error);
 
             // 外部データベースで失敗しても、自作チェックの結果を表示する
             if (url) {
+
                 if (a === 0) {
                     safetyResult = "外部データベースで判定できませんでした";
                 } else {
@@ -440,12 +432,13 @@ document.getElementById("result").innerHTML = `
                 `;
 
             } else {
+
                 document.getElementById("result").textContent =
                     "URLの形式を確認してください";
+
             }
         }
     }
 </script>
 </body>
 </html>
-
