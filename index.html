@@ -157,6 +157,36 @@ h4 {
    .label {
     white-space: nowrap;
 }
+   .credits {
+    max-width: 900px;
+    margin: 30px auto 0;
+    padding: 20px;
+    color: #ffffff;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.credits h3 {
+    color: #ffffff;
+    font-size: 18px;
+    white-space: normal;
+}
+
+.credits a {
+    color: #9db8ff;
+    text-decoration: underline;
+}
+
+.credits a:hover {
+    color: #ffffff;
+}
+
+.credits .copyright {
+    margin-top: 20px;
+    font-size: 11px;
+    color: #bbbbbb;
+}
 </style>
   <title>URLチェッカーver１</title>
 </head>
@@ -176,6 +206,42 @@ h4 {
 
     <div id="result"></div>
 
+      <footer class="credits">
+    <h3>使用したサービス・参考情報</h3>
+
+    <p>
+        危険なURLの照合：
+        <a href="https://urlhaus.abuse.ch/" target="_blank" rel="noopener noreferrer">
+            URLhaus
+        </a>
+    </p>
+
+    <p>
+        悪質通販サイト情報：
+        <a href="https://www.ccj.kokusen.go.jp/aksht_tuhn" target="_blank" rel="noopener noreferrer">
+            国民生活センター 越境消費者センター
+        </a>
+        （2026年6月17日公表分）
+    </p>
+
+    <p>
+        バックエンド：
+        <a href="https://www.cloudflare.com/developer-platform/products/workers/" target="_blank" rel="noopener noreferrer">
+            Cloudflare Workers
+        </a>
+    </p>
+
+    <p>
+        Webサイト公開：
+        <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">
+            GitHub Pages
+        </a>
+    </p>
+
+    <p class="copyright">
+        ※このサイトは危険性を完全に判定・保証するものではありません。
+    </p>
+</footer>
   </div>
 
 <script>
