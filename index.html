@@ -352,7 +352,8 @@ if (!response.ok || scanData.status !== "finished") {
 const urlhaus = scanData.urlhaus;
 
 // URLhausの確認状況
-const unavailable = urlhaus?.status !== "checked";
+// テスト用：URLhausに接続できなかった状態を再現
+const unavailable = true;
 
 // URLhausで危険情報が見つかった場合
 if (urlhaus?.status === "checked" && urlhaus.found === true) {
