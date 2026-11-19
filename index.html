@@ -545,6 +545,16 @@ const reportedDomains = [
     "fjallravenjapan.com"
 ];
 
+   // HTML表示時の文字列を安全にする
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+   
 async function checkUrl() {
     let input = document.getElementById("urlInput").value.trim();
 
@@ -670,6 +680,51 @@ if (!response.ok || scanData.status !== "finished") {
 // URLhausの結果//////////
 const urlhaus = scanData.urlhaus;
 
+// HTML解析の結果
+const html = scanData.html;
+
+// HTML解析ができたか
+const htmlUnavailable = html?.status !== "checked";
+
+// HTML解析で見つかった特徴
+if (html?.status === "checked") {
+
+    if (html.hasPassword) {
+        warnings.push("ページ内にパスワード入力欄があります");
+        reasons.push(
+            "パスワード入力欄が存在します。信頼できるサイトか確認してから入力してください。"
+        );
+    }
+
+    if (html.hasEmail) {
+        warnings.push("ページ内にメールアドレス入力欄があります");
+        reasons.push(
+            "メールアドレスを入力する欄があります。個人情報の送信先を確認してください。"
+        );
+    }
+
+    if (html.hasTelephone) {
+        warnings.push("ページ内に電話番号入力欄があります");
+        reasons.push(
+            "電話番号を入力する欄があります。個人情報の送信先を確認してください。"
+        );
+    }
+
+    if (html.hasIframe) {
+        warnings.push("ページ内にiframeが使用されています");
+        reasons.push(
+            "別のページやコンテンツを埋め込むiframeが使用されています。"
+        );
+    }
+
+    if (html.hasExternalForm) {
+        warnings.push("外部サイトへ送信するフォームがあります");
+        reasons.push(
+            "入力した情報が別のドメインへ送信される可能性があります。送信先を確認してください。"
+        );
+    }
+}
+
 // URLhausの確認状況
 // テスト用：URLhausに接続できなかった状態を再現
 const unavailable = urlhaus?.status !== "checked";
@@ -699,9 +754,14 @@ if (a > 0) {
 // 画面に表示
 document.getElementById("result").innerHTML = `
     <h2>${safetyResult}</h2>
+    ${
+    html?.title
+    ? `<h4>ページタイトル：${escapeHtml(html.title)}</h4>`
+    : ""
+}
 
     ${
-        warnings.length > 0 || unavailable
+        warnings.length > 0 || unavailable || htmlUnavailable
         ? `<div class="warning-box">
             <h3>⚠ 注意点 ⚠</h3>
 
@@ -718,6 +778,11 @@ document.getElementById("result").innerHTML = `
                 ? `<p>一部のデータベースに接続できず、確認できませんでした。</p>`
                 : ""
             }
+            ${
+    htmlUnavailable
+    ? `<p>ページのHTML解析ができませんでした。サイトにアクセスできない、または解析対象外の可能性があります。</p>`
+    : ""
+}
         </div>`
         : ""
     }
