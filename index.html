@@ -685,6 +685,7 @@ const html = scanData.html;
 
 // HTML解析ができたか
 const htmlUnavailable = html?.status !== "checked";
+const htmlRedirect = html?.status === "redirect";
 
 // HTML解析で見つかった特徴
 if (html?.status === "checked") {
@@ -811,7 +812,9 @@ document.getElementById("result").innerHTML = `
             }
             ${
     htmlUnavailable
-    ? `<p>ページのHTML解析ができませんでした。サイトにアクセスできない、または解析対象外の可能性があります。</p>`
+    ? htmlRedirect
+        ? `<p>リダイレクトが発生したため、HTML解析を中止しました。</p>`
+        : `<p>ページのHTML解析ができませんでした。サイトにアクセスできない、または解析対象外の可能性があります。</p>`
     : ""
 }
         </div>`
