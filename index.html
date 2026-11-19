@@ -755,13 +755,26 @@ if (urlhaus?.status === "checked" && urlhaus.found === true) {
 
 // 最終結果
 if (a > 0) {
-    safetyResult = "危険である可能性があります";
-} else if (unavailable) {
-    safetyResult = "一部の確認ができませんでした";
-} else {
-    safetyResult = "危険情報は見つかりませんでした";
-}
 
+    // 危険情報が見つかった場合
+    safetyResult = "危険である可能性があります";
+
+} else if (warnings.length > 0) {
+
+    // HTML解析などで注意点が見つかった場合
+    safetyResult = "注意が必要な項目が見つかりました";
+
+} else if (unavailable || htmlUnavailable) {
+
+    // 一部の確認ができなかった場合
+    safetyResult = "一部の確認ができませんでした";
+
+} else {
+
+    // 注意点も危険情報も見つからなかった場合
+    safetyResult = "危険情報は見つかりませんでした";
+
+}
 
 
 // 画面に表示
