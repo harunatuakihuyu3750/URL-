@@ -34,6 +34,39 @@
     box-sizing: border-box;
    flex: 0 0 auto;
 }
+   /* ヘッダー */
+.site-header {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nav-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #172b4d;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav-button.active {
+    background: #4267e8;
+    color: white;
+}
+
+.nav-button:hover {
+    opacity: 0.85;
+}
 
    h1 {
     text-align: center;
@@ -127,6 +160,22 @@ h4 {
 
     @media (max-width: 600px) {
 
+
+       .nav-buttons {
+    width: 100%;
+    gap: 8px;
+}
+
+.nav-button {
+    flex: 1;
+    padding: 12px 8px;
+    font-size: 14px;
+}
+
+#checklist label {
+    line-height: 1.8;
+}
+       
     .container {
         width: 100%;
         padding: 20px;
@@ -239,6 +288,24 @@ h4 {
   <title>URLチェッカーver１</title>
 </head>
 <body>
+   <body>
+
+<header class="site-header">
+    <div class="nav-buttons">
+        <button class="nav-button active"
+                onclick="switchScreen('checker')">
+            URLチェッカー
+        </button>
+
+        <button class="nav-button"
+                onclick="switchScreen('selfcheck')">
+            セルフチェック
+        </button>
+    </div>
+</header>
+
+<div id="checkerScreen">
+
    <div class="container">
 
     <h1>URLに危険なところがないか確かめます</h1>
@@ -258,9 +325,175 @@ h4 {
     
   </div>
 
+</div>
+      <div id="selfcheckScreen" style="display: none;">
 
+    <div class="container">
+
+        <h1>サイトの危険性セルフチェック</h1>
+
+        <p class="description">
+            気になる特徴にチェックを入れてください
+        </p>
+
+        <div id="checklist">
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                URLの文字列が公式サイトと違う、または不自然
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                突然メールやSNSなどで送られてきたURL
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                「今すぐ」「本日限定」など急いで行動するよう求められる
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                必要以上に個人情報やクレジットカード情報を求められる
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                商品の価格が相場より極端に安い
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                支払い方法が不自然、または限定されている
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                運営会社・住所・連絡先などが確認できない
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                日本語の表現や文章に不自然なところがある
+            </label>
+
+        </div>
+
+        <button id="checkButton"
+                onclick="checkSelfCheck()"
+                style="width:100%; margin-top:25px;">
+            チェック結果を見る
+        </button>
+
+        <div id="selfcheckResult"></div>
+
+    </div>
+
+</div>
 <script>
 
+   // 画面切り替え
+function switchScreen(screen) {
+
+    const checkerScreen = document.getElementById("checkerScreen");
+    const selfcheckScreen = document.getElementById("selfcheckScreen");
+
+    const buttons = document.querySelectorAll(".nav-button");
+
+    if (screen === "checker") {
+
+        checkerScreen.style.display = "block";
+        selfcheckScreen.style.display = "none";
+
+        buttons[0].classList.add("active");
+        buttons[1].classList.remove("active");
+
+    } else {
+
+        checkerScreen.style.display = "none";
+        selfcheckScreen.style.display = "block";
+
+        buttons[0].classList.remove("active");
+        buttons[1].classList.add("active");
+
+    }
+}
+
+   // セルフチェック
+function checkSelfCheck() {
+
+    const checks = document.querySelectorAll(".risk-check");
+
+    let count = 0;
+
+    checks.forEach(check => {
+
+        if (check.checked) {
+            count++;
+        }
+
+    });
+
+    let result = "";
+    let message = "";
+
+    if (count <= 1) {
+
+        result = "注意点は少ないようです";
+
+        message =
+            "チェックされた特徴は少ないですが、安全を保証するものではありません。";
+
+    } else if (count <= 3) {
+
+        result = "注意が必要です";
+
+        message =
+            "複数の注意点があります。個人情報や支払い情報を入力する前に、サイトの信頼性を確認してください。";
+
+    } else {
+
+        result = "危険である可能性が高いです";
+
+        message =
+            "多くの注意点が見つかりました。利用を避け、個人情報や支払い情報を入力しないことをおすすめします。";
+
+    }
+
+    document.getElementById("selfcheckResult").innerHTML = `
+
+        <div class="warning-box">
+
+            <h2>${result}</h2>
+
+            <h3>チェック数：${count} / ${checks.length}</h3>
+
+            <p>${message}</p>
+
+            <p>
+                ※この結果は目安であり、サイトの安全性を保証するものではありません。
+            </p>
+
+        </div>
+
+    `;
+
+}
 
    // 国民生活センターの悪質通販サイト情報
 // 2026年6月17日時点の掲載ドメイン
