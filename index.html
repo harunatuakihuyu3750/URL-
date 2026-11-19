@@ -157,7 +157,19 @@ h4 {
     box-sizing: border-box;
 }
 
+/* HTML解析結果用 */
+.analysis-box {
+    background: #eef6ff;
+    border: 1px solid #9bc5ff;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 20px 0;
+    box-sizing: border-box;
+}
 
+.analysis-box h3 {
+    color: #2563eb;
+}
     @media (max-width: 600px) {
 
 
@@ -758,8 +770,8 @@ document.getElementById("result").innerHTML = `
     ${
     html?.status === "checked"
     ? `
-        <div class="warning-box">
-            <h3>HTML解析結果</h3>
+        <div class="analysis-box">
+    <h3>HTML解析結果</h3>
 
             <p>パスワード入力欄：
                 ${html.hasPassword ? "⚠ 検出あり" : "✓ 検出なし"}
