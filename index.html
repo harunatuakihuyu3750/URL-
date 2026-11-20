@@ -301,7 +301,6 @@ h4 {
   <title>URLchecker</title>
 </head>
 <body>
-   <body>
 
 <header class="site-header">
     <div class="nav-buttons">
@@ -325,7 +324,7 @@ h4 {
 
     <p class="description">
      安全を保障するものではありません<br>
-     hrmlも分析されます<br>
+     HTMLも分析されます<br>
      外部データベースを使って判断するので判定に時間がかかる場合があります
     </p>
 
@@ -774,10 +773,10 @@ if (a > 0) {
     // HTML解析などで注意点が見つかった場合
     safetyResult = "注意が必要な項目が見つかりました";
 
-} else if (unavailable) {
+} else if (unavailable || htmlUnavailable) {
 
     // 一部の確認ができなかった場合
-    safetyResult = "一部の確認ができませんでした";
+    safetyResult = "危険情報は見つかりませんでしたが<br>一部の確認ができませんでした";
 
 } else {
 
