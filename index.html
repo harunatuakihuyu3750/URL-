@@ -350,6 +350,18 @@ h4 {
 
         <div id="checklist">
 
+           <label>
+               <input type="checkbox" class="risk-check">
+               URLはHTTPS（https://）で始まっていますか？
+           </label>
+           <br><br>
+
+            <label>
+                <input type="checkbox" class="risk-check">
+                URLに「@」が入っていますか？
+            </label>
+           <br><br>
+
             <label>
                 <input type="checkbox" class="risk-check">
                 URLの文字列が公式サイトと違う、または不自然
@@ -764,7 +776,7 @@ if (a > 0) {
     // HTML解析などで注意点が見つかった場合
     safetyResult = "注意が必要な項目が見つかりました";
 
-} else if (unavailable || htmlUnavailable) {
+} else if (unavailable) {
 
     // 一部の確認ができなかった場合
     safetyResult = "一部の確認ができませんでした";
